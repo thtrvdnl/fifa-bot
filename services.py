@@ -1,9 +1,16 @@
 import time
+import logging
 import hashlib
 import requests
+
 from typing import Union, List
 
 import utils
+
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
 
 
 def get_player_capture_url(player: utils.Player) -> str:
@@ -29,19 +36,34 @@ def check_response(response: requests.models.Response) -> bool:
 
 
 def validate_context_for_player(context: List[str]) -> List[Union[int, str]]:
-    if len(context) != 4:
+    if len(context) != 5:
         raise utils.ListLengthError(context)
 
     context = [int(field) if field.isdigit() else field for field in context]
     return context
 
 
-def start_asking_player(player: utils.Player) -> None:
+def working_hours(period: int, start: float) -> bool:
+    """How long will requests to capture a player be sent.
+    :param period: running time in minutes
+    :param start: start time
+    """
+    period *= 60
+    if (time.time() - start) > period:
+        return True
+
+
+def start_asking_player(player: utils.Player) -> str:
     """ Sends requests to capture the player. """
+    start_time = time.time()
     while True:
         time.sleep(1)
         url = get_player_capture_url(player)
         response = requests.get(url)
-        print(response.json(), time.time())
+        logging.info((response.json(), time.ctime()))
+
         if check_response(response):
-            break
+            return "Игрок взят"
+
+        if working_hours(player.time, start_time):
+            return "Время вышло"

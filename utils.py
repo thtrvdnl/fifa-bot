@@ -7,6 +7,7 @@ class Player:
     secret_key: str
     minimum_price: int
     maximum_price: int
+    time: int
 
 
 class ListLengthError(ValueError):
