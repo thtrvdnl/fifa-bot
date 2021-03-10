@@ -57,13 +57,17 @@ def start_asking_player(player: utils.Player) -> str:
     """ Sends requests to capture the player. """
     start_time = time.time()
     while True:
-        time.sleep(1)
-        url = get_player_capture_url(player)
-        response = requests.get(url)
-        logging.info((response.json(), time.ctime()))
+        try:
+            time.sleep(1)
+            url = get_player_capture_url(player)
+            response = requests.get(url)
+            logging.info((response.json(), time.ctime()))
 
-        if check_response(response):
-            return "Игрок взят"
+            if check_response(response):
+                return "Игрок взят"
 
-        if working_hours(player.time, start_time):
-            return "Время вышло"
+            if working_hours(player.time, start_time):
+                return "Время вышло"
+
+        except Exception as e:
+            logging.warning(e)

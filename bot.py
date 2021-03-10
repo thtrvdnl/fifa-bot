@@ -29,10 +29,17 @@ def redeem_player(update: Update, context: CallbackContext) -> None:
         player = utils.Player(*valid_context)
         result = services.start_asking_player(player)
         context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+
     except utils.AuthError:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="Неверные данные пользователя",
+        )
+
+    except utils.ListLengthError:
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Не правильно введены данные",
         )
 
 
