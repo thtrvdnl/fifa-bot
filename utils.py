@@ -11,8 +11,8 @@ class Player:
 
 
 class ListLengthError(ValueError):
-    """ Context list of wrong length. """
+    """Context list of wrong length."""
 
 
 class AuthError(ValueError):
-    """ Incorrect user data. """
+    """Incorrect user data."""
