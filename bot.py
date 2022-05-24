@@ -1,5 +1,6 @@
 from environs import Env
 from telegram import Update
+from telegram.error import NetworkError
 from telegram.ext import (
     Updater,
     CallbackContext,
@@ -39,12 +40,18 @@ def redeem_player(update: Update, context: CallbackContext) -> None:
     except utils.ListLengthError:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Не правильно введены данные",
+            text="Неправильно введены данные",
+        )
+
+    except NetworkError:
+        context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Ошибка соединения телеграмма",
         )
 
 
 def main() -> None:
-    """ Start the bot. """
+    """Start the bot."""
     updater = Updater(token=env.str("TOKEN"), use_context=True)
     dispatcher = updater.dispatcher
 

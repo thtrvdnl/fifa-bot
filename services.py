@@ -25,7 +25,7 @@ def get_player_capture_url(player: utils.Player) -> str:
 
 
 def check_response(response: requests.models.Response) -> bool:
-    """ Checks the answer to the player's capture. """
+    """Checks the answer to the player's capture."""
     context = response.json()
     if context["error"] == "":
         return True
@@ -54,7 +54,7 @@ def working_hours(period: int, start: float) -> bool:
 
 
 def start_asking_player(player: utils.Player) -> str:
-    """ Sends requests to capture the player. """
+    """Sends requests to capture the player."""
     start_time = time.time()
     while True:
         try:
